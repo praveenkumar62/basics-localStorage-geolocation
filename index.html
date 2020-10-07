@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,intial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>APIs</title>
+        <style>
+            h1 {
+                text-align: center;
+            }
+            button {
+                background: coral;
+                border: 0;
+                padding: 10px 25px;
+            }
+            .clearfix::after {
+                display: table;
+                content: "";
+                clear: both;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Getting User Location</h1>
+        <article class="clearfix">
+            <div style="float:left;width:30%">
+                <button id="btn1">Find Me</button>
+            </div>
+            <div style="float:left;width:70%">
+                <span style="display:block;" id="showText"></span>
+            </div>
+        </article>
+
+        <h1>Local Storage</h1>
+        <article>
+            <div style="float:left;width:30%">
+                <button id="btn2" onclick="counter1();">Click</button>
+            </div>
+            <div style="float:left;width:70%">
+                <span style="display:block;" id="showCount">0</span>
+            </div>
+        </article>
+
+        <script>
+            // Get user location and show the data with errors
+            var btn1 = document.getElementById('btn1');
+            var showText = document.getElementById('showText');
+
+            btn1.addEventListener('click',function() {
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (val){
+                        showText.innerHTML = 'Latitude: ' + val.coords.latitude + ' Longitude: ' + val.coords.longitude;
+                    },
+                    function (err){
+                        if(err.PERMISSION_DENIED) {
+                            showText.innerHTML = 'Permission denied by user';
+                        } else if(err.POSITION_UNAVAILABLE) {
+                            showText.innerHTML = 'Location position is not available';
+                        } else if(err.TIMEOUT) {
+                            showText.innerHTML = 'Timed out while searching for location';
+                        } else {
+                            showText = 'Unknown error';
+                        }
+                    }
+                    )
+                } else {
+                    showText.innerHTML = "Browser is not supported";
+                }
+            });
+
+            // localStorage - Method 1 & 2
+            var btn2 = document.getElementById('btn2');
+            var showCount = document.getElementById('showCount');
+
+            var counter = 0;
+            if(localStorage.getItem('counterOne')) {
+                showCount.textContent = localStorage.getItem('counterOne');
+            }
+
+            function counter1() {
+                
+                if(localStorage.getItem('counterOne')) {
+                    // counter = Number(localStorage.getItem('counterOne')); method-1
+                    counter = Number(localStorage.counterOne); /* method-2 */
+                }
+                counter++;
+                showCount.textContent = counter;
+                // localStorage.setItem('counterOne',counter); method-1
+                localStorage.counterOne = counter; /* method-2 */
+            }
+
+        </script>
+    </body>
+</html>
